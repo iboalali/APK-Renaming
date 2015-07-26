@@ -1,42 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace Silent_APK_Renaming {
     class Program {
+
+        [DllImport( "kernel32.dll" )]
+        private static extern IntPtr GetConsoleWindow ();
+
+        [DllImport( "user32.dll" )]
+        private static extern bool ShowWindow ( IntPtr hWnd, int nCmdShow );
+
+        private const int SW_HIDE = 0;
+        private const int SW_SHOW = 5;
+        private const int SW_SHOWMINIMIZED = 2;
 
         private static string AppName { get; set; }
         private static string PackageName { get; set; }
         private static string VersionCode { get; set; }
         private static string MinSDK { get; set; }
+        private static string VersionName { get; set; }
 
-        private static string command = "aapt.exe dump badging ";
+        //private static string command = "aapt.exe dump badging ";
+        private static string command2 = @"C:\Users\Ibrahim\AppData\Roaming\APK Renaming\aapt.exe";
+        private static string command2parameters = " dump badging ";
         private static string apkPath = string.Empty;
         private static string renameMode = string.Empty;
         private static string result = string.Empty;
 
         private static string appDataPath = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
-        private static string silentApkRenaming_executableName = "Silent APK Renaming.exe";
-        private static string aapt_executableName = "aapt.exe";
+        //private static string silentApkRenaming_executableName = "Silent APK Renaming.exe";
+        //private static string aapt_executableName = "aapt.exe";
 
-        private static string apk = @"C:\Users\Ibrahim\Documents\Visual Studio 2013\Projects\APK Renaming\app-release.apk";
+        //private static string apk = @"C:\Users\Ibrahim\Documents\Visual Studio 2013\Projects\APK Renaming\app-release.apk";
 
         static void Main ( string[] args ) {
+            //var handle = GetConsoleWindow();
+            var handle = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
 
-            Console.WriteLine( "Number of Argument: " + args.Length.ToString() );
+            // Hide Console
+            //ShowWindow( handle, SW_HIDE );
 
-            if ( args.Length == 0 ) {
-                args = new string[]{
-                    apk,
-                    "P"
-                };
-            }
+            // Show Console
+            //ShowWindow( handle, SW_SHOW );
 
-            foreach ( var item in args ) {
-                Console.WriteLine( item );
-            }
+            // Minimize Console
+            ShowWindow( handle, SW_SHOWMINIMIZED | SW_HIDE );
+
+            //Console.WriteLine( "v5" );
+            //Console.WriteLine();
+            //Console.WriteLine( "Number of Argument: " + args.Length.ToString() );
+
+            //if ( args.Length == 0 ) {
+            //    args = new string[]{
+            //        apk,
+            //        "P"
+            //    };
+            //}
+
+            //foreach ( var item in args ) {
+            //    Console.WriteLine( item );
+            //}
 
             for ( int i = 0; i < args.Length; i++ ) {
                 if ( args[i][0] == '-' ) {
@@ -45,32 +73,38 @@ namespace Silent_APK_Renaming {
 
             }
 
-            foreach ( var item in args ) {
-                Console.WriteLine( item );
-            }
+            //foreach ( var item in args ) {
+            //    Console.WriteLine( item );
+            //}
 
             apkPath = args[0];
             renameMode = args[1];
 
-            Console.WriteLine( "\nPress Any Key to Continue" );
-            Console.ReadLine();
+            //Console.WriteLine( "\nPress Any Key to Continue" );
+            //Console.ReadLine();
 
-            string com = String.Format( command + "\"{0}\"", apkPath );
-            Console.WriteLine( "Command: " + com );
+            //string com = String.Format( command2 + "\"{0}\"", apkPath );
+            //Console.WriteLine( "Command: " + com );
 
-            result = ExecuteCommandSync( com );
+            //result = ExecuteCommandSync( com );
+
+            //Console.WriteLine( "Command: " + command2 );
+            string parameters = command2parameters + "\"" + apkPath + "\"" + " " + "-" + renameMode;
+            //Console.WriteLine( "Parameters: " + parameters );
+
+            result = ExecuteCommandSync( command2, parameters );
 
             if ( result == null ) {
-                Console.WriteLine( "No Result, result == null" );
-                Console.WriteLine( "\nPress Any Key to Continue" );
-                Console.ReadLine();
+                //Console.WriteLine( "No Result, result == null" );
+                //Console.WriteLine( "\nPress Any Key to Continue" );
+                //Console.ReadLine();
                 return;
             }
 
             if ( result == "" ) {
-                Console.WriteLine( "No Result, result == \"\"" );
-                Console.WriteLine( "\nPress Any Key to Continue" );
-                Console.ReadLine();
+                //Console.WriteLine( "No Result, result == \"\"" );
+                //Console.WriteLine( "\nPress Any Key to Continue" );
+                //Console.ReadLine();
                 return;
             }
 
@@ -78,23 +112,42 @@ namespace Silent_APK_Renaming {
             PackageName = getAppPackageName( result );
             VersionCode = getAppVersionCode( result );
             MinSDK = getMinSDKVersion( result );
+            VersionName = getAppVersionName( result );
 
-            Console.WriteLine();
-            Console.WriteLine( "AppName: " + AppName );
-            Console.WriteLine( "PackageName: " + PackageName );
-            Console.WriteLine( "VersionCode: " + VersionCode );
-            Console.WriteLine( "MinSDK: " + MinSDK );
+            //Console.WriteLine();
+            //Console.WriteLine( "AppName: " + AppName );
+            //Console.WriteLine( "PackageName: " + PackageName );
+            //Console.WriteLine( "VersionCode: " + VersionCode );
+            //Console.WriteLine( "MinSDK: " + MinSDK );
+            //Console.WriteLine( "Version Name: " + VersionName );
 
-            Console.WriteLine( "\nPress Any Key to Continue" );
-            Console.ReadLine();
+            string name = string.Empty;
 
             if ( renameMode == "P" ) {
-
+                name = PackageName + "-"
+                    + VersionName + "-"
+                    + VersionCode + "-"
+                    + "minAPI" + MinSDK
+                    + ".apk";
             } else if ( renameMode == "N" ) {
+                name = AppName + "-"
+                    + VersionName + "-"
+                    + VersionCode + "-"
+                    + "minAPI" + MinSDK
+                    + ".apk";
 
             }
 
+            string path = apkPath.Substring( 0, apkPath.LastIndexOf( '\\' ) );
+            //Console.WriteLine( Path.Combine( path, name ) );
+            //Console.WriteLine( "Name: " + name );
 
+            if ( name != string.Empty ) {
+                File.Move( apkPath, Path.Combine( path, name ) );
+            }
+
+            //Console.WriteLine( "\nPress Any Key to Continue" );
+            //Console.ReadLine();
 
 
         }
@@ -112,20 +165,62 @@ namespace Silent_APK_Renaming {
                 // Incidentally, /c tells cmd that we want it to execute the command that follows,
                 // and then exit.
                 System.Diagnostics.ProcessStartInfo procStartInfo =
-                    new System.Diagnostics.ProcessStartInfo( "cmd", "/c " + command );
+//new System.Diagnostics.ProcessStartInfo( "cmd", "/c " + command );
+                    new System.Diagnostics.ProcessStartInfo( "cmd", command );
+
 
                 // The following commands are needed to redirect the standard output.
                 // This means that it will be redirected to the Process.StandardOutput StreamReader.
                 procStartInfo.RedirectStandardOutput = true;
                 procStartInfo.UseShellExecute = false;
                 // Do not create the black window.
-                procStartInfo.CreateNoWindow = true;
+                //procStartInfo.CreateNoWindow = true;
                 // Now we create a process, assign its ProcessStartInfo and start it
                 System.Diagnostics.Process proc = new System.Diagnostics.Process();
                 proc.StartInfo = procStartInfo;
                 proc.Start();
+
+                string s = proc.StandardOutput.ReadToEnd();
+                Console.WriteLine( "Result: " );
+                Console.WriteLine( s );
+                proc.WaitForExit();
                 // Get the output into a string
-                return proc.StandardOutput.ReadToEnd();
+                return s;
+            } catch ( Exception objException ) {
+                // Log the exception
+                Console.WriteLine( objException.Message );
+                return null;
+            }
+        }
+
+        private static string ExecuteCommandSync ( string command, string parameters ) {
+            try {
+                // create the ProcessStartInfo using "cmd" as the program to be run,
+                // and "/c " as the parameters.
+                // Incidentally, /c tells cmd that we want it to execute the command that follows,
+                // and then exit.
+                System.Diagnostics.ProcessStartInfo procStartInfo =
+//new System.Diagnostics.ProcessStartInfo( "cmd", "/c " + command );
+                    new System.Diagnostics.ProcessStartInfo( command, parameters );
+
+
+                // The following commands are needed to redirect the standard output.
+                // This means that it will be redirected to the Process.StandardOutput StreamReader.
+                procStartInfo.RedirectStandardOutput = true;
+                procStartInfo.UseShellExecute = false;
+                // Do not create the black window.
+                //procStartInfo.CreateNoWindow = true;
+                // Now we create a process, assign its ProcessStartInfo and start it
+                System.Diagnostics.Process proc = new System.Diagnostics.Process();
+                proc.StartInfo = procStartInfo;
+                proc.Start();
+
+                string s = proc.StandardOutput.ReadToEnd();
+                //Console.WriteLine( "Result: " );
+                //Console.WriteLine( s );
+                proc.WaitForExit();
+                // Get the output into a string
+                return s;
             } catch ( Exception objException ) {
                 // Log the exception
                 Console.WriteLine( objException.Message );
@@ -136,7 +231,7 @@ namespace Silent_APK_Renaming {
         private static string getAppName ( string result ) {
             string appNameLabel = "application-label:";
             int index = result.IndexOf( appNameLabel ) + appNameLabel.Length + 1;
-            int indexNewLine = result.IndexOf( Environment.NewLine, index );
+            int indexNewLine = result.IndexOf( '\'', index );
             string appName = result.Substring( index, indexNewLine - index );
             return appName;
 
@@ -166,6 +261,14 @@ namespace Silent_APK_Renaming {
             int indexQoute = result.IndexOf( '\'', index );
             string appMinSDKVersion = result.Substring( index, indexQoute - index );
             return appMinSDKVersion;
+        }
+
+        private static string getAppVersionName ( string result ) {
+            string appVersionNameLabel = "versionName=";
+            int index = result.IndexOf( appVersionNameLabel ) + appVersionNameLabel.Length + 1;
+            int indexQoute = result.IndexOf( '\'', index );
+            string appVersionName = result.Substring( index, indexQoute - index );
+            return appVersionName;
         }
 
 

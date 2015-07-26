@@ -15,6 +15,7 @@ namespace ShellExtention {
 
         private string silentApkRenaming_executableName = "Silent APK Renaming.exe";
         private string aapt_executableName = "aapt.exe";
+        private string iconFileName = "icon.ico";
 
         private string toolsFolderName = "tools";
         private string appDataFolderName = "APK Renaming";
@@ -23,6 +24,7 @@ namespace ShellExtention {
 
         public Form1 () {
             InitializeComponent();
+            this.Icon = global::ShellExtention.Properties.Resources.icon;
         }
 
         private void btnSetOption_Click ( object sender, EventArgs e ) {
@@ -45,6 +47,9 @@ namespace ShellExtention {
                             Path.Combine( Path.Combine( appDataPath, appDataFolderName ),
                                                 aapt_executableName ), true );
 
+            File.Copy( Path.Combine( toolsFolderName, iconFileName ),
+                            Path.Combine( Path.Combine( appDataPath, appDataFolderName ),
+                                                iconFileName ), true );
             // Create the Registry
             RegistryKey key = Registry.ClassesRoot;
             if ( ( key = key.OpenSubKey( ".apk", true ) ) == null ) {
@@ -64,6 +69,8 @@ namespace ShellExtention {
                 key = key.OpenSubKey( "shell", true );
                 key = key.CreateSubKey( "Rename APK with App Name" );
             }
+
+            key.SetValue( "icon", Path.Combine( Path.Combine( appDataPath, appDataFolderName ), iconFileName ) );
 
             if ( ( key = key.OpenSubKey( "command", true ) ) == null ) {
                 key = Registry.ClassesRoot;
@@ -86,6 +93,8 @@ namespace ShellExtention {
                 key = key.OpenSubKey( "shell", true );
                 key = key.CreateSubKey( "Rename APK with Package Name" );
             }
+
+            key.SetValue( "icon", Path.Combine( Path.Combine( appDataPath, appDataFolderName ), iconFileName ) );
 
             if ( ( key = key.OpenSubKey( "command", true ) ) == null ) {
                 key = Registry.ClassesRoot;
