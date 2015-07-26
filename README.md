@@ -1,7 +1,13 @@
 APK Renaming
 ===================
 
-This sets two items in the context menu of an APK file to instantly renaming them according to the app name or package name.  
+This sets two items in the context menu of an APK file to instantly renaming them according to the app name or package name. 
+
+![Screenshot](https://github.com/iboalali/APK-Renaming/blob/master/Assets/screenshot%20context%20menu.png)
+
+Thank you Hosam Ershedat for helping me with the result of the aapt.exe application in a cmd started from the context menu.
+
+His twitter: [hosamhhr](https://twitter.com/hosamhhr)
 
 
 #####Copyright © 2014 iboalali
