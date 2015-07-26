@@ -39,32 +39,10 @@ namespace Silent_APK_Renaming {
         //private static string apk = @"C:\Users\Ibrahim\Documents\Visual Studio 2013\Projects\APK Renaming\app-release.apk";
 
         static void Main ( string[] args ) {
-            //var handle = GetConsoleWindow();
             var handle = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
-
-            // Hide Console
-            //ShowWindow( handle, SW_HIDE );
-
-            // Show Console
-            //ShowWindow( handle, SW_SHOW );
 
             // Minimize Console
             ShowWindow( handle, SW_SHOWMINIMIZED | SW_HIDE );
-
-            //Console.WriteLine( "v5" );
-            //Console.WriteLine();
-            //Console.WriteLine( "Number of Argument: " + args.Length.ToString() );
-
-            //if ( args.Length == 0 ) {
-            //    args = new string[]{
-            //        apk,
-            //        "P"
-            //    };
-            //}
-
-            //foreach ( var item in args ) {
-            //    Console.WriteLine( item );
-            //}
 
             for ( int i = 0; i < args.Length; i++ ) {
                 if ( args[i][0] == '-' ) {
@@ -73,38 +51,18 @@ namespace Silent_APK_Renaming {
 
             }
 
-            //foreach ( var item in args ) {
-            //    Console.WriteLine( item );
-            //}
-
             apkPath = args[0];
             renameMode = args[1];
 
-            //Console.WriteLine( "\nPress Any Key to Continue" );
-            //Console.ReadLine();
-
-            //string com = String.Format( command2 + "\"{0}\"", apkPath );
-            //Console.WriteLine( "Command: " + com );
-
-            //result = ExecuteCommandSync( com );
-
-            //Console.WriteLine( "Command: " + command2 );
             string parameters = command2parameters + "\"" + apkPath + "\"" + " " + "-" + renameMode;
-            //Console.WriteLine( "Parameters: " + parameters );
 
             result = ExecuteCommandSync( command2, parameters );
 
             if ( result == null ) {
-                //Console.WriteLine( "No Result, result == null" );
-                //Console.WriteLine( "\nPress Any Key to Continue" );
-                //Console.ReadLine();
                 return;
             }
 
             if ( result == "" ) {
-                //Console.WriteLine( "No Result, result == \"\"" );
-                //Console.WriteLine( "\nPress Any Key to Continue" );
-                //Console.ReadLine();
                 return;
             }
 
@@ -113,13 +71,6 @@ namespace Silent_APK_Renaming {
             VersionCode = getAppVersionCode( result );
             MinSDK = getMinSDKVersion( result );
             VersionName = getAppVersionName( result );
-
-            //Console.WriteLine();
-            //Console.WriteLine( "AppName: " + AppName );
-            //Console.WriteLine( "PackageName: " + PackageName );
-            //Console.WriteLine( "VersionCode: " + VersionCode );
-            //Console.WriteLine( "MinSDK: " + MinSDK );
-            //Console.WriteLine( "Version Name: " + VersionName );
 
             string name = string.Empty;
 
@@ -139,15 +90,11 @@ namespace Silent_APK_Renaming {
             }
 
             string path = apkPath.Substring( 0, apkPath.LastIndexOf( '\\' ) );
-            //Console.WriteLine( Path.Combine( path, name ) );
-            //Console.WriteLine( "Name: " + name );
+
 
             if ( name != string.Empty ) {
                 File.Move( apkPath, Path.Combine( path, name ) );
             }
-
-            //Console.WriteLine( "\nPress Any Key to Continue" );
-            //Console.ReadLine();
 
 
         }
