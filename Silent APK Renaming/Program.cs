@@ -26,7 +26,7 @@ namespace Silent_APK_Renaming {
         private static string VersionName { get; set; }
 
         //private static string command = "aapt.exe dump badging ";
-        private static string command2 = @"C:\Users\Ibrahim\AppData\Roaming\APK Renaming\aapt.exe";
+        private static string command2 = "aapt.exe";
         private static string command2parameters = " dump badging ";
         private static string apkPath = string.Empty;
         private static string renameMode = string.Empty;
