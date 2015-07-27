@@ -42,7 +42,7 @@ namespace Silent_APK_Renaming {
             var handle = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
 
             // Minimize Console
-            ShowWindow( handle, SW_SHOWMINIMIZED | SW_HIDE );
+            //ShowWindow( handle, SW_SHOWMINIMIZED | SW_HIDE );
 
             for ( int i = 0; i < args.Length; i++ ) {
                 if ( args[i][0] == '-' ) {
@@ -156,7 +156,7 @@ namespace Silent_APK_Renaming {
                 procStartInfo.RedirectStandardOutput = true;
                 procStartInfo.UseShellExecute = false;
                 // Do not create the black window.
-                //procStartInfo.CreateNoWindow = true;
+                procStartInfo.CreateNoWindow = true;
                 // Now we create a process, assign its ProcessStartInfo and start it
                 System.Diagnostics.Process proc = new System.Diagnostics.Process();
                 proc.StartInfo = procStartInfo;
@@ -166,7 +166,7 @@ namespace Silent_APK_Renaming {
                 //Console.WriteLine( "Result: " );
                 //Console.WriteLine( s );
                 proc.WaitForExit();
-                // Get the output into a string
+                // Get the output into a string*
                 return s;
             } catch ( Exception objException ) {
                 // Log the exception

@@ -14,8 +14,9 @@ namespace ShellExtention {
     public partial class Form1 : Form {
 
         private string silentApkRenaming_executableName = "Silent APK Renaming.exe";
+        private string silentApkRenaming_configFile = "Silent APK Renaming.exe.config";
         private string aapt_executableName = "aapt.exe";
-        private string iconFileName = "icon.ico";
+        private string iconFileName = "icon2.ico";
 
         private string toolsFolderName = "tools";
         private string appDataFolderName = "APK Renaming";
@@ -24,32 +25,121 @@ namespace ShellExtention {
 
         public Form1 () {
             InitializeComponent();
-            this.Icon = global::ShellExtention.Properties.Resources.icon;
+            this.Icon = global::ShellExtention.Properties.Resources.icon2;
         }
 
         private void btnSetOption_Click ( object sender, EventArgs e ) {
-            // Check if the appdata folder for this application exist
-            if ( Directory.Exists( Path.Combine( appDataPath, appDataFolderName ) ) ) {
-                // Delete the appdata application folder
-                Directory.Delete( Path.Combine( appDataPath, appDataFolderName ), true );
+            try {
+                // Check if the appdata folder for this application exist
+                if ( Directory.Exists( Path.Combine( appDataPath, appDataFolderName ) ) ) {
+                    // Delete the appdata application folder
+                    Directory.Delete( Path.Combine( appDataPath, appDataFolderName ), true );
+                }
+            } catch ( IOException ioex ) {
+                DialogResult r = MessageBox.Show( ioex.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error );
+                if ( r == System.Windows.Forms.DialogResult.Retry ) {
+                    btnSetOption_Click( sender, e );
+                }
+                return;
+            } catch ( Exception ex ) {
+                MessageBox.Show( ex.Message, "Error" );
+                return;
             }
 
-            // Create the appdata application folder
-            Directory.CreateDirectory( Path.Combine( appDataPath, appDataFolderName ) );
 
-            // Copy the silent apk renaming application to the appdata application folder
-            File.Copy( Path.Combine( toolsFolderName, silentApkRenaming_executableName ),
-                            Path.Combine( Path.Combine( appDataPath, appDataFolderName ),
-                                                silentApkRenaming_executableName ), true );
+            try {
+                // Create the appdata application folder
+                Directory.CreateDirectory( Path.Combine( appDataPath, appDataFolderName ) );
+            } catch ( IOException ioex ) {
+                DialogResult r = MessageBox.Show( ioex.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error );
+                if ( r == System.Windows.Forms.DialogResult.Retry ) {
+                    btnSetOption_Click( sender, e );
+                }
+                return;
+            } catch ( Exception ex ) {
+                MessageBox.Show( ex.Message, "Error" );
+                return;
+            }
 
-            // Copy the aapt tool to the appdata application folder
-            File.Copy( Path.Combine( toolsFolderName, aapt_executableName ),
-                            Path.Combine( Path.Combine( appDataPath, appDataFolderName ),
-                                                aapt_executableName ), true );
 
-            File.Copy( Path.Combine( toolsFolderName, iconFileName ),
-                            Path.Combine( Path.Combine( appDataPath, appDataFolderName ),
-                                                iconFileName ), true );
+            try {
+                // Copy the silent apk renaming application to the appdata application folder
+                File.Copy( Path.Combine( toolsFolderName, silentApkRenaming_executableName ),
+                                Path.Combine( Path.Combine( appDataPath, appDataFolderName ),
+                                                    silentApkRenaming_executableName ), true );
+            } catch ( IOException ioex ) {
+                DialogResult r = MessageBox.Show( ioex.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error );
+                if ( r == System.Windows.Forms.DialogResult.Retry ) {
+                    btnSetOption_Click( sender, e );
+                }
+                return;
+            } catch ( Exception ex ) {
+                MessageBox.Show( ex.Message, "Error" );
+                return;
+            }
+
+            try {
+                // Copy the silent apk renaming application config file to the appdata application folder
+                File.Copy( Path.Combine( toolsFolderName, silentApkRenaming_configFile ),
+                                Path.Combine( Path.Combine( appDataPath, appDataFolderName ),
+                                                    silentApkRenaming_configFile ), true );
+            } catch ( IOException ioex ) {
+                DialogResult r = MessageBox.Show( ioex.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error );
+                if ( r == System.Windows.Forms.DialogResult.Retry ) {
+                    btnSetOption_Click( sender, e );
+                }
+                return;
+            } catch ( Exception ex ) {
+                MessageBox.Show( ex.Message, "Error" );
+                return;
+            }
+
+            try {
+
+            } catch ( IOException ioex ) {
+                DialogResult r = MessageBox.Show( ioex.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error );
+                if ( r == System.Windows.Forms.DialogResult.Retry ) {
+                    btnSetOption_Click( sender, e );
+                }
+                return;
+            } catch ( Exception ex ) {
+                MessageBox.Show( ex.Message, "Error" );
+                return;
+            }
+
+
+            try {
+                // Copy the aapt tool to the appdata application folder
+                File.Copy( Path.Combine( toolsFolderName, aapt_executableName ),
+                                Path.Combine( Path.Combine( appDataPath, appDataFolderName ),
+                                                    aapt_executableName ), true );
+            } catch ( IOException ioex ) {
+                DialogResult r = MessageBox.Show( ioex.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error );
+                if ( r == System.Windows.Forms.DialogResult.Retry ) {
+                    btnSetOption_Click( sender, e );
+                }
+                return;
+            } catch ( Exception ex ) {
+                MessageBox.Show( ex.Message, "Error" );
+                return;
+            }
+
+            try {
+                File.Copy( Path.Combine( toolsFolderName, iconFileName ),
+                                            Path.Combine( Path.Combine( appDataPath, appDataFolderName ),
+                                                                iconFileName ), true );
+            } catch ( IOException ioex ) {
+                DialogResult r = MessageBox.Show( ioex.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error );
+                if ( r == System.Windows.Forms.DialogResult.Retry ) {
+                    btnSetOption_Click( sender, e );
+                }
+                return;
+            } catch ( Exception ex ) {
+                MessageBox.Show( ex.Message ,"Error"  );
+                return;
+            }
+
+
             // Create the Registry
             RegistryKey key = Registry.ClassesRoot;
             if ( ( key = key.OpenSubKey( ".apk", true ) ) == null ) {

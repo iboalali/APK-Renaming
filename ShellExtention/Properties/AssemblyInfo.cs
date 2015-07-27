@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "ShellExtention" )]
+[assembly: AssemblyTitle( "APK Renaming" )]
 [assembly: AssemblyDescription( "Add or Remove the option in the right-click menu of a APK file" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "iboalali" )]
